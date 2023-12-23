@@ -54,7 +54,6 @@ async def check_charity_project_not_empty(
 async def update_full_amount_in_charity_project(
         project_id: int,
         project_in: CharityProjectUpdate,
-        project: CharityProject,
         session: AsyncSession,
 ) -> CharityProject:
     """Корутина проверяет можно ли изменять проект."""
@@ -69,13 +68,13 @@ async def update_full_amount_in_charity_project(
     if 'full_amount' not in project_in:
         return charity_project
 
-    if charity_project.invested_amount > project.full_amount:
+    if charity_project.invested_amount > project_in['full_amount']:
         raise HTTPException(
             status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
             detail='Параметр full_amount нельзя установить меньше внесённой cуммы.'
         )
 
-    if charity_project.full_amount < project.full_amount:
+    if charity_project.full_amount < project_in['full_amount']:
         raise HTTPException(
             status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
             detail='Параметр full_amount нельзя установить меньше текущего!'
