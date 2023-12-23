@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.crud.charity_project import charity_project_crud
@@ -80,3 +80,20 @@ async def update_full_amount_in_charity_project(
             detail='Параметр full_amount нельзя установить меньше текущего!'
         )
     return charity_project
+
+
+async def check_invested(
+        full_amount_obj: int,
+        invested_amount_db: int,
+        fully_invested_db: int,
+) -> None:
+    if fully_invested_db:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail='Закрытый проект нельзя редактировать!',
+        )
+    if full_amount_obj < invested_amount_db:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail='Сумма инвистиций должна быть больше, существующей!',
+        )
