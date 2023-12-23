@@ -81,15 +81,3 @@ async def update_full_amount_in_charity_project(
         )
 
     return charity_project
-
-
-def check_amount(
-        new_amount: int,
-        project: CharityProject
-) -> None:
-    invested = project.invested_amount
-    if invested > new_amount:
-        raise HTTPException(
-            status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
-            detail=f'Нельзя установить сумму меньше внесенной {invested}!'
-        )
