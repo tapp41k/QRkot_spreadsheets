@@ -65,13 +65,16 @@ async def update_full_amount_in_charity_project(
         )
     project_in = project_in.dict(exclude_unset=True)
 
-    if charity_project.full_amount < charity_project.invested_amount:
+    if 'full_amount' not in project_in:
+        return charity_project
+
+    if charity_project.invested_amount > project_in['full_amount']:
         raise HTTPException(
-            status_code=HTTPStatus.BAD_REQUEST,
-            detail='Параметр full_amount нельзя установить меньше внесённой суммы.'
+            status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
+            detail='Параметр full_amount нельзя установить меньше внесённой cуммы.'
         )
 
-    if charity_project.full_amount < charity_project.full_amount:
+    if charity_project.full_amount < project_in['full_amount']:
         raise HTTPException(
             status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
             detail='Параметр full_amount нельзя установить меньше текущего!'

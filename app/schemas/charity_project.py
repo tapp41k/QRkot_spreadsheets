@@ -1,4 +1,5 @@
 from typing import Optional
+from datetime import datetime as dt
 
 from pydantic import Field, Extra, validator, PositiveInt
 
@@ -41,19 +42,19 @@ class CharityProjectUpdate(CharityProjectBase):
         return value
 
     @validator('invested_amount')
-    def invested_amount_exit(cls, value: bool):
+    def invested_amount_exit(cls, value: int):
         if value:
             raise ValueError('Нельзя редактировать')
         return value
 
     @validator('create_date')
-    def create_date_exit(cls, value: bool):
+    def create_date_exit(cls, value: dt):
         if value:
             raise ValueError('Нельзя редактировать')
         return value
 
     @validator('close_date')
-    def close_date_exit(cls, value: bool):
+    def close_date_exit(cls, value: dt):
         if value:
             raise ValueError('Нельзя редактировать')
         return value
