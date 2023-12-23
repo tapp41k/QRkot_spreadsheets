@@ -65,8 +65,14 @@ async def update_full_amount_in_charity_project(
         )
     project_in = project_in.dict(exclude_unset=True)
 
-    if 'full_amount' not in project_in:
-        return charity_project
+    if 'full_amount' in project_in.dict():
+        full_amount = project_in.dict()['full_amount']
+
+        if full_amount < charity_project.invested_amount:
+            raise HTTPException(
+                status_code=HTTPStatus.BAD_REQUEST,
+                detail='Параметр full_amount нельзя установить меньше внесённой суммы.'
+            )
 
     if charity_project.invested_amount > project_in['full_amount']:
         raise HTTPException(

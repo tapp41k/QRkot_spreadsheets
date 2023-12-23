@@ -1,6 +1,6 @@
 from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 
 from app.core.db import get_async_session
 from app.core.user import current_superuser
@@ -69,8 +69,6 @@ async def partially_update_charity_project(
     project = await check_charity_project_exists(
         project_id, session
     )
-    if obj_in.full_amount is not None and obj_in.full_amount < project.invested_amount:
-        raise HTTPException(status_code=422, detail="Новая требуемая сумма не может быть меньше уже внесенной суммы")
     project = await update_full_amount_in_charity_project(project_id, obj_in, session)
     if obj_in.name is not None:
         await check_charity_project_name_duplicate(obj_in.name, session)
