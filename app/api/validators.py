@@ -70,30 +70,13 @@ async def update_full_amount_in_charity_project(
 
     if charity_project.invested_amount > project_in['full_amount']:
         raise HTTPException(
-            status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail='Параметр full_amount нельзя установить меньше внесённой cуммы.'
         )
 
     if charity_project.full_amount < project_in['full_amount']:
         raise HTTPException(
-            status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail='Параметр full_amount нельзя установить меньше текущего!'
         )
     return charity_project
-
-
-async def check_invested(
-        full_amount_obj: int,
-        invested_amount_db: int,
-        fully_invested_db: int,
-) -> None:
-    if fully_invested_db:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail='Закрытый проект нельзя редактировать!',
-        )
-    if full_amount_obj < invested_amount_db:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail='Сумма инвистиций должна быть больше, существующей!',
-        )
