@@ -9,6 +9,7 @@ class CharityProjectBase(CommonBase):
     """Базовый класс схемы, от которого наследуем схемы для проекта."""
     name: Optional[str] = Field(None, min_length=1, max_length=100)
     description: Optional[str] = Field(None, min_length=1)
+    full_amount: Optional[PositiveInt]
 
     class Config:
         extra = Extra.forbid
@@ -33,8 +34,6 @@ class CharityProjectCreate(CharityProjectBase):
 
 
 class CharityProjectUpdate(CharityProjectBase):
-    required_amount: Optional[float] = None
-
     @validator('fully_invested')
     def fully_invested_not_edit(cls, value: bool):
         if value is True:
