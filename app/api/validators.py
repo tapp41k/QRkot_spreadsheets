@@ -80,3 +80,11 @@ async def update_full_amount_in_charity_project(
             detail='Параметр full_amount нельзя установить меньше текущего!'
         )
     return charity_project
+
+
+def check_charity_project_invested_sum(project: CharityProject, new_amount: int):
+    if project.invested_amount > new_amount:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail='Нельзя установить сумму, ниже уже вложенной!'
+        )
