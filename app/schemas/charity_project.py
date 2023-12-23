@@ -1,7 +1,7 @@
 from typing import Optional
-from datetime import datetime as dt
+from datetime import datetime
 
-from pydantic import Field, Extra, validator, PositiveInt
+from pydantic import Field, validator, PositiveInt, Extra
 
 from .base import CommonBase
 
@@ -10,7 +10,6 @@ class CharityProjectBase(CommonBase):
     """Базовый класс схемы, от которого наследуем схемы для проекта."""
     name: Optional[str] = Field(None, min_length=1, max_length=100)
     description: Optional[str] = Field(None, min_length=1)
-    full_amount: Optional[PositiveInt]
 
     class Config:
         extra = Extra.forbid
@@ -35,28 +34,26 @@ class CharityProjectCreate(CharityProjectBase):
 
 
 class CharityProjectUpdate(CharityProjectBase):
-    full_amount: PositiveInt
-
     @validator('fully_invested')
     def fully_invested_not_edit(cls, value: bool):
-        if value is True:
+        if value:
             raise ValueError('Закрытый проект нельзя редактировать')
         return value
 
     @validator('invested_amount')
-    def invested_amount_exit(cls, value: int):
-        if value:
-            raise ValueError('Нельзя редактировать')
+    def invested_amount_not_edit(cls, value: int):
+        if value or value == 0:
+            raise ValueError('invested_amount нельзя редактировать')
         return value
 
     @validator('create_date')
-    def create_date_exit(cls, value: dt):
+    def create_date_exit(cls, value: datetime):
         if value:
             raise ValueError('Нельзя редактировать')
         return value
 
     @validator('close_date')
-    def close_date_exit(cls, value: dt):
+    def close_date_exit(cls, value: datetime):
         if value:
             raise ValueError('Нельзя редактировать')
         return value
