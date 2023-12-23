@@ -76,8 +76,7 @@ async def update_full_amount_in_charity_project(
 
     if charity_project.full_amount < project_in['full_amount']:
         raise HTTPException(
-            status_code=HTTPStatus.BAD_REQUEST,
+            status_code=HTTPStatus.UNPROCESSABLE_ENTITY,
             detail='Параметр full_amount нельзя установить меньше текущего!'
         )
-
     return charity_project
