@@ -35,6 +35,8 @@ class CharityProjectCreate(CharityProjectBase):
 
 
 class CharityProjectUpdate(CharityProjectBase):
+    full_amount: PositiveInt
+
     @validator('fully_invested')
     def fully_invested_not_edit(cls, value: bool):
         if value is True:
