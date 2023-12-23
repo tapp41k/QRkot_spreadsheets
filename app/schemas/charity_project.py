@@ -33,6 +33,7 @@ class CharityProjectCreate(CharityProjectBase):
 
 
 class CharityProjectUpdate(CharityProjectBase):
+    required_amount: Optional[float] = None
 
     @validator('fully_invested')
     def fully_invested_not_edit(cls, value: bool):
